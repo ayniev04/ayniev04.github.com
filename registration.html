@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Регистрация</title>
+	<link rel="stylesheet" type="text/css" href="login-reg.css">
+	<script src="jquery-3.2.0.min.js"></script>
+</head>
+<body>
+	<form id='reg' method="post" action="reg.php">
+		<div id="reg-form">
+			<div id="header">
+				Mini<span>Chat</span>
+			</div>
+			<div id="inputs">
+				<input class="area" type="text" id="username" name="username" placeholder="username" />
+				<input class="area" type="password" name="pass" id="pass" placeholder="password" minlength="6" />
+				<input class="area" type="password" id="confirmPass" placeholder="confirm password"  name="confirmPass" />
+				<input type="submit" style="margin-right:1rem" value="Создать аккаунт" />
+			</div>
+			<div id="links">
+				<a class="link" href="index.html">Войти</a>
+			</div>
+			<p id="regError" style="text-align:center;color:red;display:none">Неизвестная ошибка!</p>
+		</fieldset>
+	</form>
+	<script>
+		reg.addEventListener('submit', function(e) {
+			if(pass.value != confirmPass.value) {
+				regError.style.display = 'block'
+				regError.innerHTML = 'Пароли не совпадают!'
+				e.preventDefault()
+			} else if(pass.value == '' || confirmPass.value == '') {
+				regError.style.display = 'block'
+				regError.innerHTML = 'Пароль не введен!'
+				e.preventDefault()
+			} else {
+				e.preventDefault()
+				regError.style.display = 'block'
+				regError.style.color = '#000'
+				regError.innerHTML = 'Загрузка...'
+				let query = $.ajax({
+					type: 'POST',
+					url: 'reg.php',
+					data: `username=${username.value}&pass=${pass.value}`,
+					dataType: 'html',
+					success: function(data) {
+						if(data.length >= 41) {
+							reg.submit()
+						} else {
+							console.log(data.length)
+							regError.style.color = 'red'
+							regError.style.display = 'block'
+							regError.innerHTML = data
+						}
+					}
+				})
+			}
+
+		})
+	</script>
+</body>
+</html>
